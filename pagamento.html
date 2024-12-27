@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Fundo preto */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Ajustado para iniciar na parte superior */
+            min-height: 100vh;
+            overflow-y: auto; /* Permite rolagem vertical */
+        }
+
+        .payment-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            background-color: transparent;
+            border: 1px solid #55FF95; /* Borda verde para o container */
+        }
+
+        h1 {
+            text-align: center;
+            color: #55FF95; /* Verde no título */
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #55FF95, 0 0 30px #55FF95, 0 0 40px #55FF95, 0 0 50px #55FF95; /* Brilho mais espalhado */
+        }
+
+        .purchase-details,
+        .payment-code,
+        .payment-instructions,
+        .payment-number {
+            border: 1px solid #55FF95; /* Borda verde */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .purchase-details p,
+        .payment-code p,
+        .payment-instructions p,
+        .payment-number p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .purchase-details span,
+        .payment-code span {
+            font-weight: bold;
+        }
+
+        .payment-code {
+            text-align: center; /* Centralizar o campo de código */
+        }
+
+        textarea {
+            width: 100%; /* Ajustar o tamanho para 100% */
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            background-color: transparent; /* Fundo transparente */
+            color: #fff;
+            border-color: #55FF95; /* Borda verde */
+            text-align: center; /* Alinhar texto no centro */
+        }
+
+        .payment-number {
+            text-align: center;
+        }
+
+        .payment-number input {
+            width: 90%; /* Ampliar a largura do campo de número */
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: transparent;
+            color: #fff;
+            border-color: #55FF95; /* Borda verde */
+            text-align: center;
+        }
+
+        .payment-instructions h3 {
+            font-size: 18px;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase; /* Botões em maiúsculas */
+            font-weight: bold; /* Texto mais grosso */
+        }
+
+        .btn.back-btn {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .btn.confirm-btn {
+            background-color: #55FF95; /* Verde solicitado */
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Estilo para a mensagem de confirmação de pagamento */
+        .payment-confirmation {
+            text-align: center;
+            margin-top: 20px;
+            color: #55FF95;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Ajuste para o campo de código "copie e cole" */
+        .payment-code {
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #55FF95; /* Mantendo a borda verde */
+            box-shadow: 0 0 15px rgba(85, 255, 149, 0.7); /* Sombra com a cor verde */
+            border-radius: 8px;
+        }
+
+        /* Remover bordas laterais da tela */
+        body {
+            border-left: none;
+            border-right: none;
+        }
+
+        /* Remover bordas laterais do container */
+        .payment-container {
+            border-left: none;
+            border-right: none;
+        }
+
+        /* Estilo do botão flutuante do WhatsApp */
+        .whatsapp-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background-color: transparent;
+            color: white;
+            padding: 20px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-size: 40px; /* Aumenta o tamanho do botão */
+            transition: opacity 0.3s;
+            width: 70px; /* Tamanho maior do botão */
+            height: 70px; /* Tamanho maior do botão */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .whatsapp-button img {
+            width: 50px; /* Tamanho da logo dentro do botão */
+            height: 50px;
+        }
+
+        .whatsapp-button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Pagamento</h1>
+        <div class="purchase-details">
+            <p><strong>Produto:</strong> <span id="product-name"></span></p>
+            <p><strong>Preço:</strong> <span id="price"></span></p>
+            <p><strong>O que você vai receber:</strong> <span id="bonus"></span> de saldo</p>
+        </div>
+
+        <!-- Código de Pagamento -->
+        <div class="payment-code">
+            <h3>Código de Pagamento:</h3>
+            <p id="payment-code">COPIE E COLE A CHAVE ABAIXO PARA EFETUAR O PAGAMENTO</p>
+            <textarea readonly id="code-text" rows="2" cols="50">055.365.243-56</textarea>
+        </div>
+
+        <!-- Campo para inserção de número -->
+        <div class="payment-number">
+            <p><strong>Digite seu número:</strong></p>
+            <input type="text" id="user-number" placeholder="Digite aqui o número" />
+        </div>
+
+        <!-- Instruções de Pagamento -->
+        <div class="payment-instructions">
+            <h3>Instruções de Pagamento:</h3>
+            <p>1. Copie a chave acima.</p>
+            <p>2. Acesse sua plataforma de pagamento preferida.</p>
+            <p>3. Cole a chave no campo indicado e efetue o pagamento.</p>
+            <p>4. Após a confirmação do pagamento, envie o comprovante no nosso WhatsApp.</p>
+            <p>5.tire um print dessa página e nos envie através desse botão do Whatsapp.</p>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="actions">
+            <!-- Botão de Voltar -->
+<button class="btn back-btn" onclick="goToIndex()">Voltar</button>
+
+            <button class="btn confirm-btn" onclick="confirmPayment()">Confirmar Pagamento</button>
+        </div>
+
+        <!-- Mensagem de Confirmação -->
+        <div class="payment-confirmation" id="confirmation-message">
+            Pagamento confirmado! Seu saldo será atualizado.
+        </div>
+    </div>
+
+    <!-- Adicionando a biblioteca xlsx -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <script>
+        // Função para pegar os parâmetros da URL e exibir as informações
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('name');
+        const price = urlParams.get('price');
+        const bonus = urlParams.get('bonus');
+
+        document.getElementById('product-name').textContent = productName;
+        document.getElementById('price').textContent = price;
+        document.getElementById('bonus').textContent = bonus;
+
+        // Função para simular a confirmação de pagamento
+        function confirmPayment() {
+            const userNumber = document.getElementById('user-number').value;
+            
+            // Validação do número (deve ser um número válido e não vazio)
+            if (userNumber.trim() === "" || isNaN(userNumber)) {
+                alert("Por favor, insira um número válido.");
+            } else {
+                // Mostrar a mensagem de pagamento confirmado
+                document.getElementById('confirmation-message').style.display = 'block';
+
+                // Enviar dados para o Excel
+                sendDataToExcel(userNumber);
+            }
+        }
+
+        // Função para enviar os dados para o Excel automaticamente
+        function sendDataToExcel(userNumber) {
+            const productName = document.getElementById('product-name').textContent;
+            const price = document.getElementById('price').textContent;
+            const bonus = document.getElementById('bonus').textContent;
+            const paymentCode = document.getElementById('code-text').value;
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet([
+                ["Produto", "Preço", "Bônus", "Número", "Chave de Pagamento"],
+                [productName, price, bonus, userNumber, paymentCode]
+            ]);
+
+            XLSX.utils.book_append_sheet(wb, ws, "Dados do Pagamento");
+            XLSX.writeFile(wb, "Pagamento_Informações.xlsx");
+        }
+        function goToIndex() { window.location.href = "index.html"; }
+    </script>
+    
+
+    <!-- Botão do WhatsApp -->
+    <a href="https://wa.me/qr/44LGJOGYCKCGJ1" target="_blank">
+        <div class="whatsapp-button">
+            <!-- Logo do WhatsApp -->
+            <img src="WhatsApp.png" alt="WhatsApp Logo">
+        </div>
+    </a>
+</body>
+</html>

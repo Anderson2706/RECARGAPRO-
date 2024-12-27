@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>recargapro- Recargas e Serviços</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+transition: background-color 0.3s, color 0.3s;        }
+
+ body.dark-mode {
+            background-color: #121212;
+            color: #fff;        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #55FF95;
+            color: #fff;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #404050;
+            text-decoration: none;
+        }
+
+        .navbar .menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar .menu li a {
+            color: #404050;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar .menu li a:hover {
+            color: #333;
+        }
+
+        /* Botão de tema escuro */             .theme-toggle {
+            background-color: #404050;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;;
+        }
+
+        .theme-toggle:hover {
+            background-color: #333;
+        }
+
+        /* Ofertas de recarga */
+        .offers {
+            padding: 50px 0;
+        }
+
+        .offers h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #404050;
+        }
+
+        .offer-section {
+            margin-bottom: 40px;
+        }
+
+        .offer-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .offer-title h3 {
+            font-size: 22px;
+            color: #404050;
+            margin-left: 10px;
+            text-transform: uppercase;
+            font-weight: 600; /* Mais grossa */
+        }
+
+        .offer-title .star {
+            font-size: 22px;
+            color: #FFD700; /* Amarelo para estrela */
+        }
+
+        .offer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Dois módulos por linha */
+            gap: 20px;
+        }
+
+        .offer-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 250px; /* Ajuste para os módulos ficarem mais quadrados */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .offer-card.dark-mode {
+            background: #333;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .offer-card .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .offer-card .logo-container img {
+            width: 50px; /* Ajuste o tamanho da logo */
+            height: auto;
+        }
+
+        .offer-card .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #55FF95;
+        }
+
+        .offer-card .description {
+            font-size: 14px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .offer-card.dark-mode .description {
+            color: #ddd;
+        }
+
+        .offer-card .btn {
+            background: #55FF95;
+            color: #404050;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.3s;
+            display: block;
+            margin-top: auto;
+        }
+
+        .offer-card {
+            background: rgba(255, 255, 255, 0.8); /* Fundo branco translúcido */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 250px; /* Ajuste para os módulos ficarem mais quadrados */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backdrop-filter: blur(8px); /* Desfoque de fundo */
+        }
+
+        .offer-card.dark-mode {
+            background: rgba(51, 51, 51, 0.8); /* Fundo translúcido escuro para o modo escuro */
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Valores originais e promocionais */
+        .original-price {
+            font-size: 16px; /* Tamanho maior para o valor original */
+            color: #000; /* Cor preta para o valor original */
+            font-weight: bold; /* Deixa o valor original mais grosso */
+            text-decoration: line-through; /* Risco no valor original */
+            margin-bottom: 5px; /* Espaçamento entre o preço original e o promocional */
+        }
+
+        .price {
+            font-size: 20px; /* Destaque para o valor promocional */
+            font-weight: bold; /* Negrito para chamar a atenção */
+            color: #55FF95; /* Cor principal do tema */
+        }
+        
+        /* Footer */
+        .footer {
+            background: #404050;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .footer a {
+            color: #55FF95;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            color: #45D982;
+        }
+        .logo-container img {
+    width: 100px; /* Aumente ou diminua o valor conforme necessário */
+    height: auto; /* Mantém a proporção da imagem */
+}
+
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">recarga</a>
+            <nav>
+                <ul class="menu">
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#offers">Ofertas</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+<!-- Recargas Vivo -->
+<<div class="offer-grid"> <!-- Pague 8 - Receba 17 (Vivo) --> <div class="offer-card"> <div class="logo-container"> <img src="vivo.png" alt="Vivo Logo"> </div> <p class="description">Receba R$ 17,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 17,00</p> <div class="price">R$ 8,00</div> </div> <button class="btn" onclick="redirectToPayment('Vivo', 'R$ 8,00', '17')">Recargar Agora</button> </div> <!-- Pague 9 - Receba 20 (Vivo) --> <div class="offer-card"> <div class="logo-container"> <img src="vivo.png" alt="Vivo Logo"> </div> <p class="description">Receba R$ 20,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 20,00</p> <div class="price">R$ 9,00</div> </div> <button class="btn" onclick="redirectToPayment('Vivo', 'R$ 9,00', '20')">Recargar Agora</button> </div> <!-- Pague 12 - Receba 35 (Vivo) --> <div class="offer-card"> <div class="logo-container"> <img src="vivo.png" alt="Vivo Logo"> </div> <p class="description">Receba R$ 35,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 35,00</p> <div class="price">R$ 12,00</div> </div> <button class="btn" onclick="redirectToPayment('Vivo', 'R$ 12,00', '35')">Recargar Agora</button> </div> <!-- Pague 25 - Receba 60 (Vivo) --> <div class="offer-card"> <div class="logo-container"> <img src="vivo.png" alt="Vivo Logo"> </div> <p class="description">Receba R$ 60,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 60,00</p> <div class="price">R$ 25,00</div> </div> <button class="btn" onclick="redirectToPayment('Vivo', 'R$ 25,00', '60')">Recargar Agora</button> </div> <!-- Pague 8 - Receba 17 (TIM) --> <div class="offer-card"> <div class="logo-container"> <img src="tim.png" alt="TIM Logo"> </div> <p class="description">Receba R$ 17,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 17,00</p> <div class="price">R$ 8,00</div> </div> <button class="btn" onclick="redirectToPayment('TIM', 'R$ 8,00', '17')">Recargar Agora</button> </div> <!-- Pague 9 - Receba 20 (TIM) --> <div class="offer-card"> <div class="logo-container"> <img src="tim.png" alt="TIM Logo"> </div> <p class="description">Receba R$ 20,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 20,00</p> <div class="price">R$ 9,00</div> </div> <button class="btn" onclick="redirectToPayment('TIM', 'R$ 9,00', '20')">Recargar Agora</button> </div> <!-- Pague 12 - Receba 35 (TIM) --> <div class="offer-card"> <div class="logo-container"> <img src="tim.png" alt="TIM Logo"> </div> <p class="description">Receba R$ 35,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 35,00</p> <div class="price">R$ 12,00</div> </div> <button class="btn" onclick="redirectToPayment('TIM', 'R$ 12,00', '35')">Recargar Agora</button> </div> <!-- Pague 25 - Receba 60 (TIM) --> <div class="offer-card"> <div class="logo-container"> <img src="tim.png" alt="TIM Logo"> </div> <p class="description">Receba R$ 60,00 pagando apenas:</p> <div class="pricing"> <p class="original-price">R$ 60,00</p> <div class="price">R$ 25,00</div> </div> <button class="btn" onclick="redirectToPayment('TIM', 'R$ 25,00', '60')">Recargar Agora</button> </div> </div>
+
+<!-- Repita a mesma lógica para Claro e o Módulo Premium -->
+
+
+<!-- Recargas Claro -->
+<div class="offer-section">
+    <div class="offer-title">
+        <span class="star">★</span>
+        <h3>Recargas Claro</h3>
+    </div>
+    <div class="offer-grid">
+        <!-- Pague 8 - Receba 17 -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="claro.png" alt="Claro Logo">
+            </div>
+            <p class="description">Receba R$ 17,00 pagando apenas:</p>
+            <div class="pricing">
+                <p class="original-price">R$ 17,00</p>
+                <div class="price">R$ 8,00</div>
+            </div>
+          <button class="btn" onclick="redirectToPayment('claro', 'R$ 8,00', '17')">Recargar Agora</button>
+        </div>
+
+        <!-- Pague 9 - Receba 20 -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="claro.png" alt="Claro Logo">
+            </div>
+            <p class="description">Receba R$ 20,00 pagando apenas:</p>
+            <div class="pricing">
+                <p class="original-price">R$ 20,00</p>
+                <div class="price">R$ 9,00</div>
+            </div>
+         <button class="btn" onclick="redirectToPayment('claro', 'R$ 9,00', '20')">Recargar Agora</button>
+        </div>
+
+        <!-- Pague 12 - Receba 35 -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="claro.png" alt="Claro Logo">
+            </div>
+            <p class="description">Receba R$ 35,00 pagando apenas:</p>
+            <div class="pricing">
+                <p class="original-price">R$ 35,00</p>
+                <div class="price">R$ 12,00</div>
+            </div>
+         <button class="btn" onclick="redirectToPayment('claro', 'R$ 12,00', '35')">Recargar Agora</button>
+        </div>
+
+        <!-- Pague 25 - Receba 60 -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="claro.png" alt="Claro Logo">
+            </div>
+            <p class="description">Receba R$ 60,00 pagando apenas:</p>
+            <div class="pricing">
+                <p class="original-price">R$ 60,00</p>
+                <div class="price">R$ 25,00</div>
+            </div>
+            <button class="btn" onclick="redirectToPayment('claro', 'R$ 25,00', '60')">Recargar Agora</button>
+        </div>
+    </div>
+</div>
+
+<!-- Telas Premium -->
+<div class="offer-section">
+    <div class="offer-title">
+        <span class="star">★</span>
+        <h3>Telas Premium</h3>
+    </div>
+    <div class="offer-grid">
+        <!-- Globo Play -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="globoplay-logo.png" alt="Globo Play Logo">
+            </div>
+            <p class="description">Assine Globo Play e receba R$ 20,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 24,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('Globo Play', 'R$ 9,50', '20')">assine já</button>       
+ </div>
+
+        <!-- HBO Max -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="hbo-logo.png" alt="HBO Max Logo">
+            </div>
+            <p class="description">Assine HBO Max e receba R$ 30,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 27,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('hbo max', 'R$ 9,50', '30')">assine já</button>       
+        </div>
+
+        <!-- Prime Video -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="primevideo.png" alt="Prime Video Logo">
+            </div>
+            <p class="description">Assine Prime Video e receba R$ 50,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 29,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('prime vídeo', 'R$ 9,50', '50')">assine já</button>       
+        </div>
+
+        <!-- Canva Pro -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="canva.png" alt="Canva Pro Logo">
+            </div>
+            <p class="description">Assine Canva Pro</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 44,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 22,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('canva pro', 'R$ 4,90', '44,90')">assine já</button>       
+        </div>
+
+        <!-- YouTube Premium -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="youtube.png" alt="YouTube Premium Logo">
+            </div>
+            <p class="description">Assine YouTube Premium</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 34,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 17,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('youtube premium', 'R$ 17,00', '34,90')">assine já</button>       
+        </div>
+
+        <!-- Disney+ -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="disney.png" alt="Disney+ Logo">
+            </div>
+            <p class="description">Assine Disney+</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 27,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 17,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('disney+', 'R$ 17,00', '27,90')">assine já</button>       
+        </div>
+
+        <!-- Premiere -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="premiere.png" alt="Premiere Logo">
+            </div>
+            <p class="description">Assine Premiere</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 19,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 10,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('premiere', 'R$ 10,00', '19,90')">assine já</button>       
+        </div>
+
+        <!-- Apple Music -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="applemusic.png" alt="Apple Music Logo">
+            </div>
+            <p class="description">Assine Apple Music</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 24,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 10,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('apple music', 'R$ 10,00', '24,90')">assine já</button>       
+        </div>
+
+        <!-- Netflix -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="netflix.png" alt="Netflix Logo">
+            </div>
+            <p class="description">Assine Netflix</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 45,90</s></p> <!-- Valor original -->
+                <div class="price">R$ 19,00</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('netflix', 'R$ 19,00', '45,90')">assine já</button>       
+        </div>
+
+        <!-- UFC -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="ufc.png" alt="UFC Logo">
+            </div>
+            <p class="description">Assine UFC e receba R$ 100,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 39,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('ufc', 'R$ 9,50', '39,90')">assine já</button>       
+        </div>
+
+        <!-- Deezer -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="deezer-logo.png" alt="Deezer Logo">
+            </div>
+            <p class="description">Assine Deezer e receba R$ 25,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 19,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('deezer', 'R$ 9,50', '19,90')">assine já</button>       
+        </div>
+
+        <!-- Paramount+ -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="paramount.png" alt="Paramount+ Logo">
+            </div>
+            <p class="description">Assine Paramount+ e receba R$ 40,00 de saldo</p>
+            <div class="pricing">
+                <p class="original-price">R$ 27,90</p> <!-- Valor original -->
+                <div class="price">R$ 9,50</div>
+            </div>
+<button class="btn" onclick="redirectToPayment('paramount+', 'R$ 9,50', '27,90')">assine já</button>       
+        </div>
+    </div>
+</div>
+<div class="offer-section">
+    <div class="offer-title">
+        <span class="star">★</span>
+        <h3>Contas</h3>
+    </div>
+    <div class="offer-grid">
+        <!-- Gmail -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="gmail.png" alt="Gmail Logo">
+            </div>
+            <p class="description">Crie sua conta Gmail</p>
+            <div class="pricing">
+                <p class="original-price">Grátis</p> <!-- Valor original -->
+                <div class="price">R$ 4,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('gmail', 'R$ 4,00', '4')">compre já</button>       
+        </div>
+
+        <!-- Facebook -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="facebook.png" alt="Facebook Logo">
+            </div>
+            <p class="description">Crie sua conta Facebook</p>
+            <div class="pricing">
+                <p class="original-price">Grátis</p> <!-- Valor original -->
+                <div class="price">R$ 11,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('facebook', 'R$ 11,00', '11')">compre já</button>       
+        </div>
+
+        <!-- Instagram (Vazio) -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="instagram.png" alt="Instagram Logo">
+            </div>
+            <p class="description">Crie uma conta no Instagram (Vazia)</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 10,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 4,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('intagram vaziu', 'R$ 4,00', '10')">compre já</button>       
+        </div>
+
+        <!-- Instagram (Com Seguidores e Conteúdo) -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="instagram.png" alt="Instagram Logo">
+            </div>
+            <p class="description">Instagram com seguidores e conteúdo</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 150,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 7,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('instagram', 'R$ 7,00', '150')">compre já</button>       
+        </div>
+    </div>
+</div>
+<div class="offer-section">
+    <div class="offer-title">
+        <span class="star">★</span>
+        <h3>Serviços</h3>
+    </div>
+    <div class="offer-grid">
+        <!-- Produção de Sites -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="pro.png" alt="Produção de Sites Logo">
+            </div>
+            <p class="description">Criação de Sites Profissionais</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 300,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 100,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('web sites', 'R$ 100,00', '100')">compre já</button>       
+        </div>
+
+        <!-- Design -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="pro.png" alt="Design Logo">
+            </div>
+            <p class="description">Criação de Designs Personalizados</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 50,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 20,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('design', 'R$ 20,00', '20')">compre já</button>       
+        </div>
+
+        <!-- Número Virtual para WhatsApp -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="whatsapp.png" alt="WhatsApp Logo">
+            </div>
+            <p class="description">Número Virtual para WhatsApp</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 25,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 12,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('numero virtual whatsapp', 'R$ 12,00', '25')">compre já</button>       
+        </div>
+
+        <!-- Número Virtual para Telegram -->
+        <div class="offer-card">
+            <div class="logo-container">
+                <img src="telegram.png" alt="Telegram Logo">
+            </div>
+            <p class="description">Número Virtual para Telegram</p>
+            <div class="pricing">
+                <p class="original-price"><s>R$ 25,00</s></p> <!-- Valor original -->
+                <div class="price">R$ 12,00</div> <!-- Preço atualizado -->
+            </div>
+<button class="btn" onclick="redirectToPayment('Número Virtual para Telegram', 'R$ 12,00', '25')">compre já</button>       
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2024 ProRecarga. Todos os direitos reservados.</p>
+</footer>
+<button class="theme-toggle" onclick="toggleTheme()">🌙 Tema Escuro</button>
+
+    <script>
+        // Função para redirecionar para a página de pagamento com as informações do produto
+        function redirectToPayment(productName, price, bonus) {
+            console.log('Produto:', productName);
+            console.log('Preço Original:', price);
+            console.log('Bônus:', bonus);
+
+            // Remove o símbolo de moeda e substitui a vírgula por um ponto para padronizar o formato
+            const formattedPrice = price.replace('R$', '').replace(',', '.').trim();
+
+            console.log('Preço Formatado:', formattedPrice);
+
+            // Cria um objeto com os dados do produto
+            const productData = {
+                name: productName, // Nome do produto
+                price: formattedPrice, // Preço formatado
+                bonus: bonus // Bônus
+            };
+
+            // Cria a query string com as informações
+            const queryParams = new URLSearchParams(productData).toString();
+            console.log('Query Params:', queryParams);
+
+            // Redireciona para a página de pagamento com as informações passadas na URL
+            window.location.href = `pagamento.html?${queryParams}`;
+        }
+    </script>
+</body>
+</html>
